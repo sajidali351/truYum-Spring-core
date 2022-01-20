@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<context:annotation-config />
+
+	<bean id="sdf" class="java.text.SimpleDateFormat">
+		<constructor-arg value="dd/MM/yyyy" />
+	</bean>
+
+	<bean id="sandwich" class="com.cognizant.truyum.model.MenuItem">
+		<property name="id" value="1" />
+		<property name="name" value="Sandwich" />
+		<property name="price" value="99.0" />
+		<property name="active" value="true" />
+		<property name="dateOfLaunch">
+			<bean factory-bean="sdf" factory-method="parse">
+				<constructor-arg value="15/03/2017" />
+			</bean>
+		</property>
+		<property name="category" value="Main Course" />
+		<property name="freeDelivery" value="true" />
+	</bean>
+
+	<bean id="burger" class="com.cognizant.truyum.model.MenuItem">
+		<property name="id" value="2" />
+		<property name="name" value="Burger" />
+		<property name="price" value="129.0" />
+		<property name="active" value="true" />
+		<property name="dateOfLaunch">
+			<bean factory-bean="sdf" factory-method="parse">
+				<constructor-arg value="23/12/2017" />
+			</bean>
+		</property>
+		<property name="category" value="Main Course" />
+		<property name="freeDelivery" value="false" />
+	</bean>
+
+	<bean id="pizza" class="com.cognizant.truyum.model.MenuItem">
+		<property name="id" value="3" />
+		<property name="name" value="Pizza" />
+		<property name="price" value="149.0" />
+		<property name="active" value="true" />
+		<property name="dateOfLaunch">
+			<bean factory-bean="sdf" factory-method="parse">
+				<constructor-arg value="21/08/2018" />
+			</bean>
+		</property>
+		<property name="category" value="Main Course" />
+		<property name="freeDelivery" value="false" />
+	</bean>
+
+	<bean id="fries" class="com.cognizant.truyum.model.MenuItem">
+		<property name="id" value="4" />
+		<property name="name" value="French Fries" />
+		<property name="price" value="57.0" />
+		<property name="active" value="false" />
+		<property name="dateOfLaunch">
+			<bean factory-bean="sdf" factory-method="parse">
+				<constructor-arg value="02/07/2017" />
+			</bean>
+		</property>
+		<property name="category" value="Starters" />
+		<property name="freeDelivery" value="true" />
+	</bean>
+
+	<bean id="brownie" class="com.cognizant.truyum.model.MenuItem">
+		<property name="id" value="5" />
+		<property name="name" value="Chocolate Brownie" />
+		<property name="price" value="32.0" />
+		<property name="active" value="true" />
+		<property name="dateOfLaunch">
+			<bean factory-bean="sdf" factory-method="parse">
+				<constructor-arg value="02/11/2022" />
+			</bean>
+		</property>
+		<property name="category" value="Desert" />
+		<property name="freeDelivery" value="true" />
+	</bean>
+
+	<bean id="menuItemList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="sandwich" />
+				<ref bean="burger" />
+				<ref bean="pizza" />
+				<ref bean="fries" />
+				<ref bean="brownie" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="menuItemDaoCollectionImpl"
+		class="com.cognizant.truyum.dao.MenuItemDaoCollectionImpl">
+		<property name="menuItemList">
+			<ref bean="menuItemList" />
+		</property>
+	</bean>
+
+	<bean id="menuItemService"
+		class="com.cognizant.truyum.service.MenuItemService"></bean>
+
+	<bean id="menuItemsInCart1" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="menuItemsInCart2" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="sandwich" />
+				<ref bean="pizza" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="cart1" class="com.cognizant.truyum.model.Cart">
+		<property name="menuItemList" ref="menuItemsInCart1"/>
+		<property name="total" value="0"/>
+	</bean>
+	
+	<bean id="cart2" class="com.cognizant.truyum.model.Cart">
+		<property name="menuItemList" ref="menuItemsInCart2"/>
+		<property name="total" value="0"/>
+	</bean>
+
+	<bean id="cartDaoMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="1" value-ref="cart1"/>
+				<entry key="2" value-ref="cart2"/>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="cartDaoCollectionImpl"
+		class="com.cognizant.truyum.dao.CartDaoCollectionImpl">
+		<property name="userCarts">
+			<ref bean="cartDaoMap" />
+		</property>
+	</bean>
+
+	<bean id="cartService"
+		class="com.cognizant.truyum.service.CartService"></bean>
+
+</beans>
